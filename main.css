@@ -1,0 +1,90 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	background: #666;
+	color: #fff;
+}
+.main {
+	padding: 20px;
+}
+#board { 
+}
+
+.board-line {
+	display: table;
+}
+.board-line input {
+	line-height: 100px;
+	display: table-cell;
+	height: 50px;
+	width: 50px;
+	border: 1px solid #ccc;
+	text-align: center;
+	font-size: 36px;
+	font-family: sans-serif;
+	background: #fff;
+	color: #000;
+}
+
+.board-line input:hover {
+	background: #ffb;
+}
+
+.board-line input.active {
+	background: #ff8;
+}
+.btn {
+	border: 1px solid #333;
+	border-radius: 3px;
+	background: -moz-linear-gradient(#555, #444);
+	color: #fff;
+	font-size: 18px;
+	font-family: sans-serif;
+	padding: 0;
+	width: 120px;
+	height: 40px;
+	text-align: center;
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.btn:hover {
+	background: -moz-linear-gradient(#444, #333);	
+}
+.form-line {
+	margin-bottom: 10px;
+}
+
+#action label {
+	color: #fff;
+	display: inline-block;
+	font-size: 18px;
+	font-family: sans-serif;
+	width: 150px;
+	text-align: right;
+}
+#action input[type='text']{
+	height: 38px;
+	width: 60px;
+	border: 1px solid #222;
+	text-align: center;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, .3) inset;
+	border-radius: 3px;
+	padding: 0;
+	vertical-align: middle;
+	font-size: 18px;
+	font-family: sans-serif;
+}
+
+#output {
+	text-align: left;
+	margin: 10px 0;
+}
+#output li {
+	line-height: 30px;
+	font-size: 18px;
+}
+#output li:hover {
+	background: -moz-linear-gradient(#444, #333);	
+}
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Wordz Solver</title>
+	<link rel="stylesheet" href="main.css"/>
+</head>
+<body>
+	<div class="main">
+		<div id="action">
+			<div class="form-line">
+				<label>Size</label>
+				<input id="board-width" type="text" value="6"> x 
+				<input id="board-height" type="text" value="2">
+				<button id="new-board" class="btn">New</button>
+			</div>
+			<div class="form-line">
+				<label>Minimum length</label>
+				<input id="min-length" type="text" value="5">
+				<button id="solve" class="btn">Solve</button>
+			</div>
+		</div>
+		<div id="board">
+		</div>
+		<div>
+			<ol id="output">
+			</ol>
+		</div>
+	</div>
+	<script type="text/javascript" src="wordzsolver.js"></script>
+	<script type="text/javascript" src="wordlist.js"></script>
+	<script type="text/javascript">
+		wordzSolver.processWordList(function () {
+			console.log('Dict Ready');
+		});
+		var board = new wordzSolver.Board({
+			width: 6,
+			height: 2,
+			letters: ['wordz?','solver']
+		});
+
+	</script>
+</body>
+</html>
