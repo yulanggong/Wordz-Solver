@@ -1,7 +1,8 @@
 
-var wordzSolver = {};
 
-;(function(W) {
+;(function(window) {
+
+var W = window.wordzSolver = window.wordzSolver || {};
 
 W.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -41,7 +42,7 @@ W.processWordList = function(callback){
 		if (!letter) {
 
 			if (obj !== dict){
-				obj._ = true; //标记最后一个单词
+				obj._ = 1; //标记最后一个单词
 			}
 
 			dict.state = 1;
@@ -52,7 +53,7 @@ W.processWordList = function(callback){
 
 		//当字符为空格时，obj 对象就是上个单词对应的结尾，做标记
 		if(letter === ' '){
-			obj._ = true;
+			obj._ = 1;
 			obj = dict;
 		} else { //当字符为非空格时单词还未结束，为 obj 添加子元素
 			obj[letter] = obj[letter] || {};
@@ -323,4 +324,4 @@ Board.prototype.walk = function(x, y, history, string){
 	}
 }
 
-})(wordzSolver);
+})(this);
