@@ -6,39 +6,44 @@
 	<link rel="stylesheet" href="main.css"/>
 </head>
 <body>
-	<div class="main">
-		<div id="action">
-			<div class="form-line">
-				<label>Size</label>
-				<input id="board-width" type="text" value="6"> x 
-				<input id="board-height" type="text" value="2">
-				<button id="new-board" class="btn">New</button>
-			</div>
-			<div class="form-line">
-				<label>Minimum length</label>
-				<input id="min-length" type="text" value="5">
-				<button id="solve" class="btn">Solve</button>
-			</div>
+	<div class="header">
+		<h1>Wordz Solver</h1>
+		<p>A word puzzle game solver. Use the ? wildcard  to represent one letter. </p>
+	</div>
+	<div class="actions">
+		<div class="group">
+			<label>Size</label>
+			<input id="board-width" type="text" value="6"> x 
+			<input id="board-height" type="text" value="2">
+			<button id="new-board" class="btn">New</button>
 		</div>
+		<div class="group">
+			<button id="random-fill" class="btn">Random Fill</button>
+		</div>
+		<div class="group">
+			<label>Minimum length</label>
+			<input id="min-length" type="text" value="5">
+			<button id="solve" class="btn">Solve</button>
+		</div>
+	</div>
+	<div class="main">
 		<div id="board">
 		</div>
-		<div>
+		<div id="result">
+			<h2>Result:</h2>
+			<p id="status"></p>
 			<ol id="output">
 			</ol>
 		</div>
 	</div>
 	<script type="text/javascript" src="wordzsolver.js"></script>
-	<script type="text/javascript" src="wordlist.js"></script>
+	<script type="text/javascript" src="dict.js"></script>
 	<script type="text/javascript">
-		wordzSolver.processWordList(function () {
-			console.log('Dict Ready');
-		});
 		var board = new wordzSolver.Board({
 			width: 6,
 			height: 2,
 			letters: ['wordz?','solver']
 		});
-
 	</script>
 </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 ;(function(window) {
 
 var W = window.wordzSolver = window.wordzSolver || {};
@@ -7,16 +5,17 @@ var W = window.wordzSolver = window.wordzSolver || {};
 W.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 W.dict = {};
-//处理完成后的 dict 结构是这样的:
+
+// the dict object will be like this:
 //{
 //	w: {
-//    _c: 1, //字母计数
+//    _c: 1, // how many times letter appears in word list.
 //		o: {
 //			r:{
 //				d: {
-//					_:true, //单词末尾标记
+//					_: 1, // mark the end of a word.
 //					s: {
-//						_:true
+//						_: 1
 //					}
 //				}
 //			}
@@ -30,39 +29,43 @@ W.processWordList = function(callback){
 	var chars = W.chars;
 
 	for (var i = chars.length - 1; i >= 0; i--) {
-		dict[chars[i]] = {_c: 0};
-	};
+		dict[chars.charAt(i)] = {_c: 0};
+	}
 
-	//递归用的函数，at 为字符的索引， obj 为字典对象或其子对象
 	function next (at, obj){
 
-		var letter = W.wordList[at]
+		var letter = W.wordList.charAt(at);
 
-		//处理结束时
+		// end of word list
 		if (!letter) {
 
 			if (obj !== dict){
-				obj._ = 1; //标记最后一个单词
+				obj._ = 1; // mark the last word
 			}
 
-			dict.state = 1;
+			dict._c = 0; // amount of letters
+
+			for (var i = chars.length - 1; i >= 0; i--) {
+				dict._c += dict[chars.charAt(i)]._c;
+			}
+
 			callback && callback();
 
 			return
 		}
 
-		//当字符为空格时，obj 对象就是上个单词对应的结尾，做标记
+		// word list is split by spaces
 		if(letter === ' '){
 			obj._ = 1;
 			obj = dict;
-		} else { //当字符为非空格时单词还未结束，为 obj 添加子元素
+		} else {
 			obj[letter] = obj[letter] || {};
 			dict[letter]._c += 1;
 			obj = obj[letter];
 		}
 
-		//防止 Call Stack 溢出，防止浏览器卡死
-		//各浏览器的 Call Stack 大小限制参考：[http://stackoverflow.com/questions/7826992/browser-javascript-stack-size-limit]
+		// clear call stack to prevent over the size limit
+		// http://stackoverflow.com/questions/7826992/browser-javascript-stack-size-limit
 		if (at % 1000 === 0){
 			setTimeout(function () {
 				next(at + 1, obj)
@@ -80,7 +83,7 @@ W.check = function(string){
 	var isWord = false, canBeWord = false;
 
 	for (var i = 0; i < string.length; i++) {
-		obj = obj[string[i]];
+		obj = obj[string.charAt(i)];
 
 		if (!obj) {
 			break;
@@ -103,12 +106,12 @@ W.check = function(string){
 
 W.randomLetter = function(){
 
-	var seed = (Math.random() * W.wordList.length).toFixed();
+	var seed = (Math.random() * W.dict._c).toFixed();
 	var letter;
 
 	for (var i = W.chars.length - 1; i >= 0; i--) {
 
-		letter = W.chars[i];
+		letter = W.chars.charAt(i);
 		seed -= W.dict[letter]._c;
 		
 		if (seed <= 0) {
@@ -123,16 +126,22 @@ W.result = {_length:0};
 
 W.output = function(string, history){
 
-	if (W.result[string]) return;
+	if (string && W.result[string]) return;
+
+	var pastTime = (+new Date() - W.startTime) / 1000;
+	var wordsCount =
+		W.result._length === 0 ? 'nothing' :
+		W.result._length === 1 ? 'one word' : ('<b>' +W.result._length + '</b> words');
+
+	$('status').innerHTML = wordsCount + ', <b>' + pastTime + '</b> secondes';
+	$('result').className = 'inline-block';
+	
+	if (!string) return;
 	
 	W.result[string] = history;
 	W.result._length += 1;
 
-	var pastTime = (+new Date() - W.startTime) / 1e3;
-	console.log(pastTime)
-
 	var li = document.createElement('li');
-
 
 	li.innerHTML = string.toLowerCase();
 	$('output').appendChild(li);
@@ -149,6 +158,8 @@ W.output = function(string, history){
 W.clearOutput = function(){
 	W.result = {_length:0};
 	$('output').innerHTML= '';
+	$('status').innerHTML= '';
+	$('result').className = '';
 }
 
 W.highLight = function(history){
@@ -187,10 +198,14 @@ var Board = W.Board = function(option){
 	self.minLength = option.minLength || 3;
 	self.letters = option.letters || [];
 
-	self.callStackSize = 0;	//防止 Call Stack 溢出用
+	self.callStackSize = 0;
 	
 	$('solve').onclick = function() {
 		self.solve();
+	}	
+
+	$('random-fill').onclick = function() {
+		self.fill(true);
 	}
 
 	$('new-board').onclick = function() {
@@ -218,7 +233,10 @@ Board.prototype.fill = function(random){
 
 		for (y = 0; y < self.width; y ++) {
 
-			letters[x][y] = random ? W.randomLetter() : self.letters[x] && self.letters[x][y] || '';
+			letters[x][y] =
+				random
+					? W.randomLetter()
+					: self.letters[x] && (self.letters[x][y] || self.letters[x].charAt && self.letters[x].charAt(y)) || '';
 
 			html += '<input type="text" id="B' + x + '-' + y + '" value="'+ letters[x][y] +'"/>';
 		}
@@ -247,6 +265,8 @@ Board.prototype.solve = function () {
 	self.minLength = +$('min-length').value || wordLimit;
 
 	W.clearOutput();
+	W.startTime = + new Date();
+	W.output();
 
 	for(x = 0; x < self.height; x++){
 		for (y = 0; y < self.width; y++) {
@@ -257,7 +277,6 @@ Board.prototype.solve = function () {
 	for(x = 0; x < self.height; x++){
 		for (y = 0; y < self.width; y++) {
 
-			W.startTime = + new Date;
 
 			self.walk(x, y, '', '');
 		}
@@ -317,9 +336,9 @@ Board.prototype.walk = function(x, y, history, string){
 
 	if (letter !== '?') {
 		addLetter(letter);
-	} else { //通配符
+	} else { //wildcard
 		for (var i = W.chars.length - 1; i >= 0; i--) {
-			addLetter(W.chars[i]);
+			addLetter(W.chars.charAt(i));
 		}
 	}
 }
