@@ -128,6 +128,8 @@ W.output = function(string, history){
 
 	if (string && W.result[string]) return;
 
+	if (string) W.result._length += 1;
+
 	var pastTime = (+new Date() - W.startTime) / 1000;
 	var wordsCount =
 		W.result._length === 0 ? 'nothing' :
@@ -139,7 +141,6 @@ W.output = function(string, history){
 	if (!string) return;
 	
 	W.result[string] = history;
-	W.result._length += 1;
 
 	var li = document.createElement('li');
 
@@ -183,6 +184,17 @@ W.clearHighLight = function(){
 	}
 }
 
+W.checkInput = function (string) {
+	var result = parseInt(string, 10);
+
+	if (!result) {
+		alert('Check your input.');
+		return false
+	}
+
+	return result;
+}
+
 window.$ = function(id){
 	return document.getElementById(id)
 }
@@ -201,16 +213,28 @@ var Board = W.Board = function(option){
 	self.callStackSize = 0;
 	
 	$('solve').onclick = function() {
+
+		var minLength = W.checkInput($('min-length').value);
+		if (!minLength) return;
+
+		self.minLength = minLength || wordLimit;
 		self.solve();
-	}	
+	}
 
 	$('random-fill').onclick = function() {
 		self.fill(true);
 	}
 
 	$('new-board').onclick = function() {
-		self.width = +$('board-width').value;
-		self.height = +$('board-height').value;
+
+		var width = W.checkInput($('board-width').value);
+		if (!width) return;
+
+		var height = W.checkInput($('board-height').value);
+		if (!height) return;
+
+		self.width = width;
+		self.height = height;
 
 		self.letters = [];
 		self.fill();
@@ -262,7 +286,6 @@ Board.prototype.solve = function () {
 	var self = this;
 	var x, y;
 
-	self.minLength = +$('min-length').value || wordLimit;
 
 	W.clearOutput();
 	W.startTime = + new Date();
@@ -334,12 +357,12 @@ Board.prototype.walk = function(x, y, history, string){
 		}
 	}
 
-	if (letter !== '?') {
-		addLetter(letter);
-	} else { //wildcard
+	if (letter === '?') {// wildcard
 		for (var i = W.chars.length - 1; i >= 0; i--) {
 			addLetter(W.chars.charAt(i));
 		}
+	} else {
+		addLetter(letter);
 	}
 }
 

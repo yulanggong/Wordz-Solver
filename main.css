@@ -5,6 +5,14 @@ html, body {
 	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif;
 	color: #222;
 }
+a {
+	color: #6FB9AD;
+}
+
+a:hover {
+	color: #2BA490;
+}
+
 .header {
 	width: 100%;
 	text-align: center;
@@ -17,16 +25,16 @@ html, body {
 	padding: 10px;
 }
 .actions {
-	background: #ddd;
+	background: #eee;
 	width: 100%;
 	text-align: center;
+	padding: 5px 0;
 }
 .group {
 	display: inline-block;
 	*display: inline;
 	*zoom: 1;
-	padding:15px;
-	background: #fff;
+	padding:5px;
 	margin: 0 10px;
 }
 
@@ -47,14 +55,14 @@ html, body {
 	background: #2BA490;
 }
 
-.group input[type='text']{
+.group input.text{
 	height: 38px;
 	line-height: 38px;
 	width: 40px;
 	border: 1px solid #ccc;
 	text-align: center;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, .1) inset;
-	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif!important;;
+	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif!important;
 	padding: 0;
 	vertical-align: middle;
 	font-size: 18px;
@@ -108,9 +116,8 @@ html, body {
 }
 
 #result {
-	width: 200px;
+	width: 240px;
 	display: none;
-	/*display: inline-block;*/
 	vertical-align: top;
 	margin-left: 15px;
 	text-align: left;
@@ -130,12 +137,12 @@ h2 {
 
 #output {
 	text-align: left;
-	padding-left: 40px;
+	padding-left: 60px;
 	margin-left: 0;
 	max-height: 400px;
 	overflow-y: auto;
 	border: 1px solid #ccc;
-	background: #ccc;
+	background: #ddd;
 }
 #output li {
 	line-height: 30px;
@@ -145,5 +152,4 @@ h2 {
 }
 #output li:hover {
 	background: #FF8;	
-}
 }
