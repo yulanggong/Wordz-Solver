@@ -10,6 +10,7 @@
 		<h1>Wordz Solver</h1>
 		<p>Wordz Solver is a tool for word puzzle games like <i>WordzUp!</i> and <i>wordoid!</i>.</p> <p>Use the ? wildcard  to represent one letter. <a href="http://github.com/yulanggong/Wordz-Solver">Source on github</a></p>
 	</div>
+	<div id="mask">Loading...</div>
 	<div class="actions">
 		<div class="group">
 			<label>Size</label>
@@ -18,7 +19,7 @@
 			<button id="new-board" class="btn">New</button>
 		</div>
 		<div class="group">
-			<button id="random-fill" class="btn">Random Fill</button>
+			<button id="random-fill" class="btn">Fill</button>
 		</div>
 		<div class="group">
 			<label>Minimum length</label>
@@ -44,6 +45,8 @@
 			height: 2,
 			letters: ['wordz?','solver']
 		});
+
+		$('mask').className = 'hide';
 	</script>
 </body>
 </html>

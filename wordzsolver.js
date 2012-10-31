@@ -23,36 +23,21 @@ W.dict = {};
 //	}
 //}
 
-W.processWordList = function(callback){
+W.processWordList = function(){
 
 	var dict = W.dict;
 	var chars = W.chars;
+	var i;
 
-	for (var i = chars.length - 1; i >= 0; i--) {
+	for (i = chars.length - 1; i >= 0; i--) {
 		dict[chars.charAt(i)] = {_c: 0};
 	}
 
-	function next (at, obj){
+	var l = W.wordList.length;
+	var letter, obj = dict;
 
-		var letter = W.wordList.charAt(at);
-
-		// end of word list
-		if (!letter) {
-
-			if (obj !== dict){
-				obj._ = 1; // mark the last word
-			}
-
-			dict._c = 0; // amount of letters
-
-			for (var i = chars.length - 1; i >= 0; i--) {
-				dict._c += dict[chars.charAt(i)]._c;
-			}
-
-			callback && callback();
-
-			return
-		}
+	for (i = 0; i < l ; i++){
+		letter = W.wordList.charAt(i);
 
 		// word list is split by spaces
 		if(letter === ' '){
@@ -63,20 +48,18 @@ W.processWordList = function(callback){
 			dict[letter]._c += 1;
 			obj = obj[letter];
 		}
-
-		// clear call stack to prevent over the size limit
-		// http://stackoverflow.com/questions/7826992/browser-javascript-stack-size-limit
-		if (at % 1000 === 0){
-			setTimeout(function () {
-				next(at + 1, obj)
-			}, 0)
-		} else {
-			next(at + 1, obj)
-		}
 	}
 
-	next(0, dict);
-}
+	if (obj !== dict){
+		obj._ = 1; // mark the last word
+	}
+
+	dict._c = 0; // amount of letters
+
+	for (i = chars.length - 1; i >= 0; i--) {
+		dict._c += dict[chars.charAt(i)]._c;
+	}
+};
 
 W.check = function(string){
 	var obj = W.dict;
@@ -101,8 +84,8 @@ W.check = function(string){
 	return {
 		isWord: isWord,
 		canBeWord: canBeWord
-	}
-}
+	};
+};
 
 W.randomLetter = function(){
 
@@ -120,7 +103,7 @@ W.randomLetter = function(){
 	}
 
 	return letter;
-}
+};
 
 W.result = {_length:0};
 
@@ -130,12 +113,11 @@ W.output = function(string, history){
 
 	if (string) W.result._length += 1;
 
-	var pastTime = (+new Date() - W.startTime) / 1000;
 	var wordsCount =
 		W.result._length === 0 ? 'nothing' :
 		W.result._length === 1 ? 'one word' : ('<b>' +W.result._length + '</b> words');
 
-	$('status').innerHTML = wordsCount + ', <b>' + pastTime + '</b> secondes';
+	$('status').innerHTML = wordsCount;
 	$('result').className = 'inline-block';
 	
 	if (!string) return;
@@ -149,55 +131,55 @@ W.output = function(string, history){
 
 	li.onmouseover = function(){
 		W.highLight(history);
-	}
+	};
 
 	li.onmouseout = function(){
 		W.clearHighLight();
-	}
-}
+	};
+};
 
 W.clearOutput = function(){
 	W.result = {_length:0};
 	$('output').innerHTML= '';
 	$('status').innerHTML= '';
 	$('result').className = '';
-}
+};
 
 W.highLight = function(history){
 
 	history = history.split(' ');
 
 	for (var i = history.length - 2; i >= 0; i--) {
-		$('B' + history[i]).className = 'active'
+		$('B' + history[i]).className = 'active';
 	}
-}
+};
 
 W.clearHighLight = function(){
 	var x = 0, y = 0;
 	while ($('B' + x + '-' + y)){
 		while ($('B' + x + '-' + y)){
-			$('B' + x + '-' +y).className = ''
-			y ++
+			$('B' + x + '-' +y).className = '';
+			y ++;
 		}
-		x ++
-		y = 0
+		x ++;
+		y = 0;
 	}
-}
+};
 
 W.checkInput = function (string) {
 	var result = parseInt(string, 10);
 
 	if (!result) {
 		alert('Check your input.');
-		return false
+		return false;
 	}
 
 	return result;
-}
+};
 
 window.$ = function(id){
-	return document.getElementById(id)
-}
+	return document.getElementById(id);
+};
 
 var Board = W.Board = function(option){
 
@@ -209,9 +191,12 @@ var Board = W.Board = function(option){
 	self.height =  option.height || 3;
 	self.minLength = option.minLength || 3;
 	self.letters = option.letters || [];
-
-	self.callStackSize = 0;
 	
+	self.finish = function(){		
+		var pastTime = (+new Date() - self.startTime) / 1000;
+		$('status').innerHTML += ', <b>' + pastTime + '</b> secondes';
+	};
+
 	$('solve').onclick = function() {
 
 		var minLength = W.checkInput($('min-length').value);
@@ -219,11 +204,11 @@ var Board = W.Board = function(option){
 
 		self.minLength = minLength || wordLimit;
 		self.solve();
-	}
+	};
 
 	$('random-fill').onclick = function() {
 		self.fill(true);
-	}
+	};
 
 	$('new-board').onclick = function() {
 
@@ -238,10 +223,10 @@ var Board = W.Board = function(option){
 
 		self.letters = [];
 		self.fill();
-	}
+	};
 
 	return self.fill();
-}
+};
 
 Board.prototype.fill = function(random){
 
@@ -275,11 +260,11 @@ Board.prototype.fill = function(random){
 	W.clearOutput();
 
 	return self;
-}
+};
 
 Board.prototype.getCellValue = function(x, y){
 	return $('B' + x + '-' + y).value.toUpperCase();
-}
+};
 
 Board.prototype.solve = function () {
 
@@ -288,8 +273,8 @@ Board.prototype.solve = function () {
 
 
 	W.clearOutput();
-	W.startTime = + new Date();
 	W.output();
+	self.startTime = + new Date();
 
 	for(x = 0; x < self.height; x++){
 		for (y = 0; y < self.width; y++) {
@@ -299,13 +284,14 @@ Board.prototype.solve = function () {
 
 	for(x = 0; x < self.height; x++){
 		for (y = 0; y < self.width; y++) {
-
-
 			self.walk(x, y, '', '');
 		}
 	}
+
+	self.finish();
+
 	return self;
-}
+};
 
 Board.prototype.walk = function(x, y, history, string){
 
@@ -314,20 +300,17 @@ Board.prototype.walk = function(x, y, history, string){
 
 	if (!letter.length) return;
 
-	self.callStackSize ++
-
 	history += x + '-' + y + ' ';
 
 	function addLetter (letter) {
 
-		self.callStackSize ++
 
 		var newString = string + letter;
 		var checkResult = W.check(newString);
 		var startX, startY, endX, endY, nextX, nextY;
 
 		if(!checkResult.canBeWord) {
-			return
+			return;
 		}
 
 		if (newString.length >= self.minLength && checkResult.isWord) {
@@ -342,16 +325,7 @@ Board.prototype.walk = function(x, y, history, string){
 		for (nextX = startX; nextX <= endX; nextX ++){
 			for (nextY = startY; nextY <= endY; nextY ++){
 				if (history.indexOf(nextX + '-' + nextY) === -1){
-					if (self.callStackSize < 1000) {
-						self.walk(nextX, nextY, history, newString);
-					} else {
-						(function(nextX, nextY){
-							setTimeout(function(){
-								self.callStackSize = 0;
-								self.walk(nextX, nextY, history, newString)
-							},0)
-						})(nextX, nextY);
-					}
+					self.walk(nextX, nextY, history, newString);
 				}
 			}
 		}
@@ -364,6 +338,6 @@ Board.prototype.walk = function(x, y, history, string){
 	} else {
 		addLetter(letter);
 	}
-}
+};
 
 })(this);
