@@ -6,20 +6,22 @@ var wordzSolver = temp.wordzSolver;
 temp = require('./wordlist.js');
 wordzSolver.wordList = temp.wordzSolver.wordList;
 
-wordzSolver.processWordList(function() {
-  console.log('Dict Ready');
+wordzSolver.processWordList();
 
-  var dict = JSON.stringify(wordzSolver.dict).replace(/"/g,'');
 
-  dict = ''
-    + ';(function(window){\n'
-    + '\tvar W = window.wordzSolver = window.wordzSolver || {};\n'
-    + '\tW.dict = '
-    + dict
-    + '})(this)';
+console.log('Dict Ready');
 
-  fs.writeFile('dict.js', dict, function (err) {
-    if (err) console.log(err);
-    else console.log("saved");
-  })
+var dict = JSON.stringify(wordzSolver.dict).replace(/"/g,'');
+
+dict = ''
+  + ';(function(window){\n'
+  + '\tvar W = window.wordzSolver = window.wordzSolver || {};\n'
+  + '\tW.dict = '
+  + dict
+  + '})(this)';
+
+fs.writeFile('dict.js', dict, function (err) {
+  if (err) console.log(err);
+  else console.log("saved");
 })
+

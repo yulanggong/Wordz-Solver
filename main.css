@@ -45,7 +45,7 @@ a:hover {
 	font-size: 18px;
 	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif;
 	padding: 0;
-	width: 120px;
+	width: 100px;
 	height: 40px;
 	text-align: center;
 	cursor: pointer;
@@ -75,6 +75,17 @@ a:hover {
 	text-align: center;
 }
 
+#mask {
+	background: #fff;
+	position: absolute;
+	width: 100%;
+	padding-top: 60px;
+	text-align: center;
+}
+
+.hide {
+	display: none;
+}
 #board { 
 	border-left: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
