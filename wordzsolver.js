@@ -332,7 +332,8 @@ Board.prototype.walk = function(x, y, history, string){
 	}
 
 	if (letter === '?') {// wildcard
-		for (var i = W.chars.length - 1; i >= 0; i--) {
+		var l = W.chars.length;
+		for (var i = 0; i < l; i++) {
 			addLetter(W.chars.charAt(i));
 		}
 	} else {
