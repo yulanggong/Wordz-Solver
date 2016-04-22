@@ -1,4 +1,4 @@
 Wordz Solver
 ------------
 
-A solver for word game WordzUp and wordoid. 
+A solver for word game BOGGLE, WordzUp and wordoid.
