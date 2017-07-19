@@ -1,4 +1,3 @@
-Wordz Solver
-------------
+# Wordz Solver
 
-A solver for word game Boggle, WordzUp and wordoid.
+A serverless solver for word game *Boggle*, *WordzUp!*, *wordoid!* and more.
