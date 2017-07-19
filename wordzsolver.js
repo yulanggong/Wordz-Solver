@@ -4,6 +4,8 @@ var W = window.wordzSolver = window.wordzSolver || {};
 
 W.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+W.modes = ['around','across','x','all'];
+
 W.dict = {};
 
 // the dict object will be like this:
@@ -24,7 +26,6 @@ W.dict = {};
 //}
 
 W.processWordList = function(){
-
 	var dict = W.dict;
 	var chars = W.chars;
 	var i;
@@ -87,8 +88,15 @@ W.check = function(string){
 	};
 };
 
-W.randomLetter = function(){
+W.map = function(array, fn) {
+	var result = [];
+	for (var i = 0; i < array.length; i ++){
+		result.push(fn(array[i], i, array));
+	}
+	return result;
+}
 
+W.randomLetter = function(){
 	var seed = (Math.random() * W.dict._c).toFixed();
 	var letter;
 
@@ -108,7 +116,6 @@ W.randomLetter = function(){
 W.result = {_length:0};
 
 W.output = function(string, history){
-
 	if (string && W.result[string]) return;
 
 	if (string) W.result._length += 1;
@@ -146,7 +153,6 @@ W.clearOutput = function(){
 };
 
 W.highLight = function(history){
-
 	history = history.split(' ');
 
 	for (var i = history.length - 2; i >= 0; i--) {
@@ -182,7 +188,6 @@ window.$ = function(id){
 };
 
 var Board = W.Board = function(option){
-
 	var self = this;
 	
 	option = option || {};
@@ -198,7 +203,6 @@ var Board = W.Board = function(option){
 	};
 
 	$('solve').onclick = function() {
-
 		var minLength = W.checkInput($('min-length').value);
 		if (!minLength) return;
 
@@ -211,7 +215,6 @@ var Board = W.Board = function(option){
 	};
 
 	$('new-board').onclick = function() {
-
 		var width = W.checkInput($('board-width').value);
 		if (!width) return;
 
@@ -225,11 +228,23 @@ var Board = W.Board = function(option){
 		self.fill();
 	};
 
+	var $modes = W.map(W.modes, function(mode){
+		var $mode = $('mode-' + mode);
+		$mode.onclick = function() {
+			W.map($modes, function($mode){
+				$mode.className = 'btn';
+			})
+			$mode.className = 'btn active';
+			self.mode = mode;
+			self.solve();
+		}
+		return $mode;
+	})
+
 	return self.fill();
 };
 
 Board.prototype.fill = function(random){
-
 	var self = this;
 	var html = '', x, y;
 	var letters = [];
@@ -267,7 +282,6 @@ Board.prototype.getCellValue = function(x, y){
 };
 
 Board.prototype.solve = function () {
-
 	var self = this;
 	var x, y;
 
@@ -294,7 +308,6 @@ Board.prototype.solve = function () {
 };
 
 Board.prototype.walk = function(x, y, history, string){
-
 	var self = this;
 	var letter = self.letters[x][y];
 
@@ -303,11 +316,9 @@ Board.prototype.walk = function(x, y, history, string){
 	history += x + '-' + y + ' ';
 
 	function addLetter (letter) {
-
-
 		var newString = string + letter;
 		var checkResult = W.check(newString);
-		var startX, startY, endX, endY, nextX, nextY;
+		var startX, startY, endX, endY, nextX, nextY, canWalk;
 
 		if(!checkResult.canBeWord) {
 			return;
@@ -317,14 +328,31 @@ Board.prototype.walk = function(x, y, history, string){
 			W.output(newString, history);
 		}
 
-		startX = x ? x - 1 : 0;
-		startY = y ? y - 1 : 0;
-		endX = (x == self.height - 1) ? x : x + 1;
-		endY = (y == self.width - 1) ? y : y + 1;
+		if (self.mode == 'all') {
+			startX = 0;
+			startY = 0;
+			endX = self.height - 1;
+			endY = self.width - 1;
+		} else {
+			startX = x ? x - 1 : 0;
+			startY = y ? y - 1 : 0;
+			endX = (x == self.height - 1) ? x : x + 1;
+			endY = (y == self.width - 1) ? y : y + 1;
+		}
 
 		for (nextX = startX; nextX <= endX; nextX ++){
 			for (nextY = startY; nextY <= endY; nextY ++){
+				canWalk = false;
 				if (history.indexOf(nextX + '-' + nextY) === -1){
+					if (self.mode == 'across') {
+						canWalk = nextX == x || nextY == y;
+					} else if (self.mode == 'x') {
+						canWalk = nextX != x && nextY != y;
+					} else {
+						canWalk = true;
+					}
+				}
+				if (canWalk) {
 					self.walk(nextX, nextY, history, newString);
 				}
 			}

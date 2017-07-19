@@ -47,8 +47,77 @@ a:hover {
 	cursor: pointer;
 	vertical-align: middle;
 }
-.btn:hover {
+
+.btn:hover, .btn.active {
 	background: #2BA490;
+}
+
+.btn-group .btn {
+	width: 40px;
+	position: relative;
+}
+
+.btn-group .btn::before {
+	content: '';
+	position: absolute;
+	top: 18px;
+	left: 18px;
+	width: 4px;
+	height: 4px;
+	background: #8ae4d6;
+	border-radius: 2px;
+}
+
+#mode-around::before {
+	box-shadow: 7px 7px 0 #FFF,
+				7px 0 0 #FFF,
+				0 7px #FFF,
+				-7px -7px #FFF,
+				-7px 0 #FFF,
+				0 -7px #FFF,
+				7px -7px #FFF,
+				-7px 7px #FFF;
+}
+			
+#mode-across::before {
+	box-shadow: 7px 0 0 #FFF,
+				0 7px #FFF,
+				-7px 0 #FFF,
+				0 -7px #FFF;
+}
+						
+#mode-x::before {
+	box-shadow: 7px 7px 0 #FFF,
+				-7px -7px #FFF,
+				7px -7px #FFF,
+				-7px 7px #FFF;
+}
+						
+#mode-all::before {
+	box-shadow: 7px 7px 0 #FFF,
+				7px 0 0 #FFF,
+				0 7px #FFF,
+				-7px -7px #FFF,
+				-7px 0 #FFF,
+				0 -7px #FFF,
+				7px -7px #FFF,
+				-7px 7px #FFF,
+				14px 14px 0 #FFF,
+				14px 0 0 #FFF,
+				0 14px #FFF,
+				-14px -14px #FFF,
+				-14px 0 #FFF,
+				0 -14px #FFF,
+				14px -14px #FFF,
+				-14px 14px #FFF,
+				14px 7px #FFF,
+				14px -7px #FFF,
+				-14px -7px #FFF,
+				-14px 7px #FFF,
+				7px 14px #FFF,
+				7px -14px #FFF,
+				-7px 14px #FFF,
+				-7px -14px #FFF;
 }
 
 .group input.text{
