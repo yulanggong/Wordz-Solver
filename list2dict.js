@@ -8,16 +8,15 @@ wordzSolver.wordList = temp.wordzSolver.wordList;
 
 wordzSolver.processWordList();
 
-
 console.log('Dict Ready');
 
-var dict = JSON.stringify(wordzSolver.dict).replace(/"/g,'');
+var dict = wordzSolver.encode(wordzSolver.dict);
 
 dict = ''
   + ';(function(window){\n'
   + '\tvar W = window.wordzSolver = window.wordzSolver || {};\n'
-  + '\tW.dict = '
-  + dict
+  + '\tW._dict = \'' + dict + '\';\n'
+  + '\tW.dict = W.decode(W._dict);\n'
   + '})(this)';
 
 fs.writeFile('dict.js', dict, function (err) {
