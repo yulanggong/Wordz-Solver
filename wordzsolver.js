@@ -11,7 +11,7 @@ W.dict = {};
 // the dict object will be like this:
 //{
 //	w: {
-//    _c: 1, // how many times letter appears in word list.
+//    $: 1, // how many times letter appears in word list.
 //		o: {
 //			r:{
 //				d: {
@@ -31,7 +31,7 @@ W.processWordList = function(){
 	var i;
 
 	for (i = chars.length - 1; i >= 0; i--) {
-		dict[chars.charAt(i)] = {_c: 0};
+		dict[chars.charAt(i)] = {$: 0};
 	}
 
 	var l = W.wordList.length;
@@ -46,7 +46,7 @@ W.processWordList = function(){
 			obj = dict;
 		} else {
 			obj[letter] = obj[letter] || {};
-			dict[letter]._c += 1;
+			dict[letter].$ += 1;
 			obj = obj[letter];
 		}
 	}
@@ -55,12 +55,32 @@ W.processWordList = function(){
 		obj._ = 1; // mark the last word
 	}
 
-	dict._c = 0; // amount of letters
+	dict.$ = 0; // amount of letters
 
 	for (i = chars.length - 1; i >= 0; i--) {
-		dict._c += dict[chars.charAt(i)]._c;
+		dict.$ += dict[chars.charAt(i)].$;
 	}
 };
+
+W.encode = function(dict){
+  return JSON.stringify(dict).replace(/"/g,'')
+  .replace(/:{/g, '')
+  .replace(/_:1,?/g, '_')
+  .replace(/}+,/g, function(a){
+    return 'abcdefghijklmnopqrstuvwxyz'[a.length - 1];
+  })
+}
+
+W.decode = function(dict){
+	dict = dict.replace(/_/g, '"_":1,')
+		.replace(/\$/g, '"$"')
+		.replace(/([A-Z])/g, '"$1":{')
+		.replace(/[a-z]/g, function(a){
+			return '}}}}}}}}}}}}}}}}}}}}}}}}}}'.slice(0, a.charCodeAt() - 97) + ','
+		})
+		.replace(/,}/g, '}')
+	return JSON.parse(dict);
+}
 
 W.check = function(string){
 	var obj = W.dict;
@@ -97,13 +117,13 @@ W.map = function(array, fn) {
 }
 
 W.randomLetter = function(){
-	var seed = (Math.random() * W.dict._c).toFixed();
+	var seed = (Math.random() * W.dict.$).toFixed();
 	var letter;
 
 	for (var i = W.chars.length - 1; i >= 0; i--) {
 
 		letter = W.chars.charAt(i);
-		seed -= W.dict[letter]._c;
+		seed -= W.dict[letter].$;
 		
 		if (seed <= 0) {
 			break;

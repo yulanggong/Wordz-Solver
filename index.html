@@ -11,9 +11,9 @@
 			<label>Mode</label>
 			<span class="btn-group">
 				<button 
-					id="mode-around" title="Around" class="btn active"></button><button 
 					id="mode-across" title="Across" class="btn"></button><button 
 					id="mode-x" title="X" class="btn"></button><button 
+					id="mode-around" title="Around" class="btn active"></button><button 
 					id="mode-all" title="All" class="btn"></button>
 			</span>
 		</div>
@@ -24,7 +24,7 @@
 			<button id="new-board" class="btn">New</button>
 		</div>
 		<div class="group">
-			<button id="random-fill" class="btn">Fill</button>
+			<button id="random-fill" class="btn">Random</button>
 		</div>
 		<div class="group">
 			<label>Min length</label>
@@ -63,8 +63,8 @@
 	<script src="wordzsolver.js"></script>
 	<script>
 		try {
-			if (localStorage.dict && localStorage.dictVersion == '1') {
-				wordzSolver.dict = (new Function('return ' + localStorage.dict))();
+			if (localStorage.dict && localStorage.dictVersion == '2') {
+				wordzSolver.dict = wordzSolver.decode(localStorage.dict);
 			}
 		} catch (e) {};
 		if (!wordzSolver.dict.A) {
@@ -81,9 +81,9 @@
 		$('mask').className = 'hide';
 		$('solve').click();
 		try {
-			if (!localStorage.dict && localStorage.dictVersion != '1') {
-				localStorage.dict = JSON.stringify(wordzSolver.dict).replace(/"/g, '');
-				localStorage.dictVersion = '1';
+			if (!localStorage.dict || localStorage.dictVersion != '2') {
+				localStorage.dict = wordzSolver._dict;
+				localStorage.dictVersion = '2';
 			}
 		} catch (e) {};
 	</script>
