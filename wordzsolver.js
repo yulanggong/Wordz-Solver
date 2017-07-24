@@ -177,6 +177,7 @@ W.highLight = function(history){
 
 	for (var i = history.length - 2; i >= 0; i--) {
 		$('B' + history[i]).className = 'active';
+		$('O' + history[i]).innerHTML = i + 1;
 	}
 };
 
@@ -185,6 +186,7 @@ W.clearHighLight = function(){
 	while ($('B' + x + '-' + y)){
 		while ($('B' + x + '-' + y)){
 			$('B' + x + '-' +y).className = '';
+			$('O' + x + '-' +y).innerHTML = '';
 			y ++;
 		}
 		x ++;
@@ -281,8 +283,8 @@ Board.prototype.fill = function(random){
 				random
 					? W.randomLetter()
 					: self.letters[x] && (self.letters[x][y] || self.letters[x].charAt && self.letters[x].charAt(y)) || '';
-
-			html += '<input type="text" id="B' + x + '-' + y + '" value="'+ letters[x][y] +'"/>';
+			var id = x + '-' + y;
+			html += '<span id="C' + id + '"><i id="O' + id + '"></i><input type="text" id="B' + id + '" value="'+ letters[x][y] +'"/></span>';
 		}
 
 		html += '</div>';

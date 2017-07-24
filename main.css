@@ -4,6 +4,7 @@ html, body {
 	background: #fff;
 	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif;
 	color: #222;
+	font-size: 14px;
 }
 
 a {
@@ -38,7 +39,7 @@ a:hover {
 	border: 0 none;
 	background: #6FB9AD;
 	color: #fff;
-	font-size: 18px;
+	font-size: 14px;
 	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif;
 	padding: 0;
 	width: 100px;
@@ -130,7 +131,7 @@ a:hover {
 	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif!important;
 	padding: 0;
 	vertical-align: middle;
-	font-size: 18px;
+	font-size: 14px;
 	font-family: sans-serif;
 	margin: 0 3px;
 }
@@ -170,10 +171,25 @@ a:hover {
 	clear:both;
 }
 
+.board-line span {
+	float: left;
+	position: relative;
+}
+
+.board-line i {
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-style: normal;
+	font-size: 12px;
+	border-radius: 2px;
+	padding: 0 4px;
+	color: #666;
+}
+
 .board-line input {
 	line-height: 50px;
 	display: block;
-	float: left;
 	height: 50px;
 	width: 50px;
 	border: 1px solid #ccc;
