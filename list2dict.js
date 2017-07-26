@@ -1,10 +1,7 @@
 
 var fs = require('fs');
-var temp = require('./wordzsolver.js');
-var wordzSolver = temp.wordzSolver;
-
-temp = require('./wordlist.js');
-wordzSolver.wordList = temp.wordzSolver.wordList;
+var wordzSolver = require('./wordzsolver').wordzSolver;
+wordzSolver.wordList = fs.readFileSync('sowpods.txt', 'utf-8').toUpperCase();
 
 wordzSolver.processWordList();
 

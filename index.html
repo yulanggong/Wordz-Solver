@@ -50,7 +50,7 @@
 	<script src="wordzsolver.js"></script>
 	<script>
 		try {
-			if (localStorage.dict && localStorage.dictVersion == '2') {
+			if (localStorage.dict && localStorage.dictVersion == '3') {
 				wordzSolver.dict = wordzSolver.decode(localStorage.dict);
 			}
 		} catch (e) {};
@@ -68,9 +68,9 @@
 		$('mask').className = 'hide';
 		$('solve').click();
 		try {
-			if (!localStorage.dict || localStorage.dictVersion != '2') {
+			if (!localStorage.dict || localStorage.dictVersion != '3') {
 				localStorage.dict = wordzSolver._dict;
-				localStorage.dictVersion = '2';
+				localStorage.dictVersion = '3';
 			}
 		} catch (e) {};
 	</script>

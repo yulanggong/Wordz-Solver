@@ -40,8 +40,8 @@ W.processWordList = function(){
 	for (i = 0; i < l ; i++){
 		letter = W.wordList.charAt(i);
 
-		// word list is split by spaces
-		if(letter === ' '){
+		// word list is split by \n
+		if(letter === '\n'){
 			obj._ = 1;
 			obj = dict;
 		} else {
