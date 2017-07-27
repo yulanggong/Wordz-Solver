@@ -1,9 +1,11 @@
 
 var fs = require('fs');
 var wordzSolver = require('./wordzsolver').wordzSolver;
-wordzSolver.wordList = fs.readFileSync('sowpods.txt', 'utf-8').toUpperCase();
+var sowpods = fs.readFileSync('sowpods.txt', 'utf-8').toUpperCase();
+var twl = fs.readFileSync('twl.txt', 'utf-8').toUpperCase();
 
-wordzSolver.processWordList();
+wordzSolver.processWordList(sowpods, 'sowpods');
+wordzSolver.processWordList(twl, 'twl');
 
 console.log('Dict Ready');
 

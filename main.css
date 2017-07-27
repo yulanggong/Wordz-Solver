@@ -3,7 +3,7 @@ html, body {
 	padding: 0;
 	background: #fff;
 	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif;
-	color: #222;
+	color: #444;
 	font-size: 14px;
 }
 
@@ -26,6 +26,20 @@ a:hover {
 	text-align: center;
 	padding: 5px 0;
 }
+.header {
+	text-align: center;
+	background: #2BA490;
+	color: #fff;
+	padding: 10px 0;
+	box-shadow: 0 0 15px rgba(0, 0, 0, .4);
+	position: relative;
+	z-index: 1;
+}
+
+.header h1 {
+	margin: 0;
+	font-size: 24px;
+}
 
 .group {
 	display: inline-block;
@@ -34,15 +48,18 @@ a:hover {
 	padding:5px;
 	margin: 0 10px;
 }
-
+.group label {
+	display: block;
+	text-align: left;
+	color: #444;
+}
 .btn {
 	border: 0 none;
-	background: #6FB9AD;
+	background: #2BA490;
 	color: #fff;
 	font-size: 14px;
 	font-family: "Helvetica Neue","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif;
-	padding: 0;
-	width: 100px;
+	padding: 0 15px;
 	height: 40px;
 	text-align: center;
 	cursor: pointer;
@@ -50,15 +67,19 @@ a:hover {
 }
 
 .btn:hover, .btn.active {
-	background: #2BA490;
+	background: #0e8c77;
 }
 
-.btn-group .btn {
+.dict-group .btn {
+	font-size: 12px;
+}
+
+.mode-group .btn {
 	width: 40px;
 	position: relative;
 }
 
-.btn-group .btn::before {
+.mode-group .btn::before {
 	content: '';
 	position: absolute;
 	top: 18px;
@@ -124,7 +145,7 @@ a:hover {
 .group input.text{
 	height: 38px;
 	line-height: 38px;
-	width: 40px;
+	width: 38px;
 	border: 1px solid #ccc;
 	text-align: center;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, .1) inset;
@@ -133,7 +154,7 @@ a:hover {
 	vertical-align: middle;
 	font-size: 14px;
 	font-family: sans-serif;
-	margin: 0 3px;
+	margin: 0;
 }
 
 
@@ -236,18 +257,17 @@ h2 {
 
 #output {
 	text-align: left;
-	padding-left: 60px;
+	padding-left: 50px;
 	margin-left: 0;
 	margin-top: 0;
-	max-height: 400px;
+	max-height: 320px;
 	overflow-y: auto;
 	border: 1px solid #ccc;
 	background: #ddd;
 }
 
 #output li {
-	line-height: 30px;
-	font-size: 18px;
+	line-height: 26px;
 	padding-left: 10px;
 	background: #eee;
 }

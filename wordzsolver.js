@@ -6,12 +6,23 @@ W.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 W.modes = ['around','across','x','all'];
 
+W.dicts = [
+{
+	name: 'sowpods',
+	endMark: '_',
+	countMark: '$'
+}, {
+	name: 'twl',
+	endMark: '-',
+	countMark: '#'
+}];
+
 W.dict = {};
 
 // the dict object will be like this:
 //{
 //	w: {
-//    $: 1, // how many times letter appears in word list.
+//		$: 1, // how many times letter appears in word list.
 //		o: {
 //			r:{
 //				d: {
@@ -25,55 +36,66 @@ W.dict = {};
 //	}
 //}
 
-W.processWordList = function(){
+W.processWordList = function(wordList, type){
 	var dict = W.dict;
 	var chars = W.chars;
-	var i;
+	var i, endMark, countMark;
+
+	W.map(W.dicts, function(item){
+		if (item.name === type) {
+			endMark = item.endMark;
+			countMark = item.countMark;
+		}
+	})
 
 	for (i = chars.length - 1; i >= 0; i--) {
-		dict[chars.charAt(i)] = {$: 0};
+		if (!dict[chars.charAt(i)]) {
+			dict[chars.charAt(i)] = {};
+		}
+		dict[chars.charAt(i)][countMark] = 0;
 	}
 
-	var l = W.wordList.length;
+	var l = wordList.length;
 	var letter, obj = dict;
 
 	for (i = 0; i < l ; i++){
-		letter = W.wordList.charAt(i);
+		letter = wordList.charAt(i);
 
 		// word list is split by \n
 		if(letter === '\n'){
-			obj._ = 1;
+			obj[endMark] = 1;
 			obj = dict;
 		} else {
 			obj[letter] = obj[letter] || {};
-			dict[letter].$ += 1;
+			dict[letter][countMark] += 1;
 			obj = obj[letter];
 		}
 	}
 
 	if (obj !== dict){
-		obj._ = 1; // mark the last word
+		obj[endMark] = 1; // mark the last word
 	}
 
-	dict.$ = 0; // amount of letters
+	dict[countMark] = 0; // amount of letters
 
 	for (i = chars.length - 1; i >= 0; i--) {
-		dict.$ += dict[chars.charAt(i)].$;
+		dict[countMark] += dict[chars.charAt(i)][countMark];
 	}
 };
 
 W.encode = function(dict){
-  return JSON.stringify(dict).replace(/"/g,'')
-  .replace(/:{/g, '')
-  .replace(/_:1,?/g, '_')
-  .replace(/}+,/g, function(a){
-    return 'abcdefghijklmnopqrstuvwxyz'[a.length - 1];
-  })
+	return JSON.stringify(dict).replace(/"/g,'')
+	.replace(/:{/g, '')
+	.replace(/(_|-):1,?/g, '$1')
+	.replace(/}+,/g, function(a){
+		return 'abcdefghijklmnopqrstuvwxyz'[a.length - 1];
+	})
 }
 
 W.decode = function(dict){
-	dict = dict.replace(/_/g, '"_":1,')
+	dict = dict.replace(/(_|-)/g, '"$1":1,')
 		.replace(/\$/g, '"$"')
+		.replace(/\#/g, '"#"')
 		.replace(/([A-Z])/g, '"$1":{')
 		.replace(/[a-z]/g, function(a){
 			return '}}}}}}}}}}}}}}}}}}}}}}}}}}'.slice(0, a.charCodeAt() - 97) + ','
@@ -82,32 +104,6 @@ W.decode = function(dict){
 	return JSON.parse(dict);
 }
 
-W.check = function(string){
-	var obj = W.dict;
-	var isWord = false, canBeWord = false;
-
-	for (var i = 0; i < string.length; i++) {
-		obj = obj[string.charAt(i)];
-
-		if (!obj) {
-			break;
-		}
-
-		if (i === string.length - 1){
-			canBeWord = true;
-
-			if (obj._) {
-				isWord = true;
-			}
-		}
-	}
-
-	return {
-		isWord: isWord,
-		canBeWord: canBeWord
-	};
-};
-
 W.map = function(array, fn) {
 	var result = [];
 	for (var i = 0; i < array.length; i ++){
@@ -115,23 +111,6 @@ W.map = function(array, fn) {
 	}
 	return result;
 }
-
-W.randomLetter = function(){
-	var seed = (Math.random() * W.dict.$).toFixed();
-	var letter;
-
-	for (var i = W.chars.length - 1; i >= 0; i--) {
-
-		letter = W.chars.charAt(i);
-		seed -= W.dict[letter].$;
-		
-		if (seed <= 0) {
-			break;
-		}
-	}
-
-	return letter;
-};
 
 W.result = {_length:0};
 
@@ -263,6 +242,23 @@ var Board = W.Board = function(option){
 		return $mode;
 	})
 
+	self.endMark = '_';
+	self.countMark = '$';
+
+	var $dicts = W.map(W.dicts, function(dict){
+		var $dict = $('dict-' + dict.name);
+		$dict.onclick = function() {
+			W.map($dicts, function($dict){
+				$dict.className = 'btn';
+			})
+			$dict.className = 'btn active';
+			self.endMark = dict.endMark;
+			self.countMark = dict.countMark;
+			self.solve();
+		}
+		return $dict;
+	})
+
 	return self.fill();
 };
 
@@ -281,7 +277,7 @@ Board.prototype.fill = function(random){
 
 			letters[x][y] =
 				random
-					? W.randomLetter()
+					? self.randomLetter()
 					: self.letters[x] && (self.letters[x][y] || self.letters[x].charAt && self.letters[x].charAt(y)) || '';
 			var id = x + '-' + y;
 			html += '<span id="C' + id + '"><i id="O' + id + '"></i><input type="text" id="B' + id + '" value="'+ letters[x][y] +'"/></span>';
@@ -297,6 +293,23 @@ Board.prototype.fill = function(random){
 	W.clearOutput();
 
 	return self;
+};
+
+Board.prototype.randomLetter = function(){
+	var seed = (Math.random() * W.dict[this.countMark]).toFixed();
+	var letter;
+
+	for (var i = W.chars.length - 1; i >= 0; i--) {
+
+		letter = W.chars.charAt(i);
+		seed -= W.dict[letter][this.countMark];
+		
+		if (seed <= 0) {
+			break;
+		}
+	}
+
+	return letter;
 };
 
 Board.prototype.getCellValue = function(x, y){
@@ -339,7 +352,7 @@ Board.prototype.walk = function(x, y, history, string){
 
 	function addLetter (letter) {
 		var newString = string + letter;
-		var checkResult = W.check(newString);
+		var checkResult = self.check(newString);
 		var startX, startY, endX, endY, nextX, nextY, canWalk;
 
 		if(!checkResult.canBeWord) {
@@ -389,6 +402,32 @@ Board.prototype.walk = function(x, y, history, string){
 	} else {
 		addLetter(letter);
 	}
+};
+
+Board.prototype.check = function(string){
+	var obj = W.dict;
+	var isWord = false, canBeWord = false;
+
+	for (var i = 0; i < string.length; i++) {
+		obj = obj[string.charAt(i)];
+
+		if (!obj) {
+			break;
+		}
+
+		if (i === string.length - 1){
+			canBeWord = true;
+
+			if (obj[this.endMark]) {
+				isWord = true;
+			}
+		}
+	}
+
+	return {
+		isWord: isWord,
+		canBeWord: canBeWord
+	};
 };
 
 })(this);
