@@ -6,10 +6,24 @@
 	<link rel="stylesheet" href="main.css"/>
 </head>
 <body>
+	<div class="header">
+		<h1>Wordz Solver
+			<iframe src="https://ghbtns.com/github-btn.html?user=yulanggong&repo=Wordz-Solver&type=star&count=false&v=2" frameborder="0" scrolling="0" width="60px" height="20px"></iframe>
+			<iframe src="https://ghbtns.com/github-btn.html?user=yulanggong&repo=Wordz-Solver&type=fork&count=false&v=2" frameborder="0" scrolling="0" width="60px" height="20px"></iframe>
+		</h1>
+	</div>
 	<div class="actions">
 		<div class="group">
+			<label>Dict</label>
+			<span class="dict-group">
+				<button 
+					id="dict-sowpods" title="SOWPODS" class="btn active">SOWPODS</button><button 
+					id="dict-twl" title="TWL" class="btn">TWL</button>
+			</span>
+		</div>
+		<div class="group">
 			<label>Mode</label>
-			<span class="btn-group">
+			<span class="mode-group">
 				<button 
 					id="mode-across" title="Across" class="btn"></button><button 
 					id="mode-x" title="X" class="btn"></button><button 
@@ -19,8 +33,8 @@
 		</div>
 		<div class="group">
 			<label>Size</label>
-			<input id="board-width" class="text" type="text" value="6"> x 
-			<input id="board-height" class="text" type="text" value="2">
+			<input id="board-width" class="text" type="text" value="3"> x 
+			<input id="board-height" class="text" type="text" value="3">
 			<button id="new-board" class="btn">New</button>
 		</div>
 		<div class="group">
@@ -28,7 +42,7 @@
 		</div>
 		<div class="group">
 			<label>Min length</label>
-			<input id="min-length" class="text" type="text" value="6">
+			<input id="min-length" class="text" type="text" value="4">
 			<button id="solve" class="btn">Solve</button>
 		</div>
 	</div>
@@ -45,8 +59,7 @@
 	<div class="help">
 		<p>A serverless solver for word game <i>Boggle</i>, <i>WordzUp!</i>, <i>wordoid!</i> and more.</p>
 		<p>Use the ? wildcard  to represent one letter.</p>
-	</div>
-	<a href="https://github.com/yulanggong/Wordz-Solver"><img style="position: absolute; top: -10px; left: -10px; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+	</div>	
 	<script type="text/javascript">
 
 		var _gaq = _gaq || [];
@@ -63,7 +76,7 @@
 	<script src="wordzsolver.js"></script>
 	<script>
 		try {
-			if (localStorage.dict && localStorage.dictVersion == '2') {
+			if (localStorage.dict && localStorage.dictVersion == '3') {
 				wordzSolver.dict = wordzSolver.decode(localStorage.dict);
 			}
 		} catch (e) {};
@@ -73,17 +86,17 @@
 	</script>
 	<script type="text/javascript">
 		var board = new wordzSolver.Board({
-			width: 6,
-			height: 2,
-			letters: ['wordz?','solver']
+			width: 3,
+			height: 3,
+			letters: ['wor','sdl','?ev']
 		});
 
 		$('mask').className = 'hide';
 		$('solve').click();
 		try {
-			if (!localStorage.dict || localStorage.dictVersion != '2') {
+			if (!localStorage.dict || localStorage.dictVersion != '3') {
 				localStorage.dict = wordzSolver._dict;
-				localStorage.dictVersion = '2';
+				localStorage.dictVersion = '3';
 			}
 		} catch (e) {};
 	</script>
