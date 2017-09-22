@@ -55,6 +55,7 @@ a:hover {
 }
 .btn {
 	border: 0 none;
+	border-radius: 0;
 	background: #2BA490;
 	color: #fff;
 	font-size: 14px;
