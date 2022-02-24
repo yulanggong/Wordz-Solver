@@ -1,3 +1,3 @@
 # Wordz Solver
 
-A serverless solver for word game *Boggle*, *WordzUp!*, *wordoid!* and more.
+A word puzzle solver for *Wordle*, *Boggle*, *WordzUp!*, *wordoid!* and more.
