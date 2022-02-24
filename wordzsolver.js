@@ -4,7 +4,7 @@ var W = window.wordzSolver = window.wordzSolver || {};
 
 W.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-W.modes = ['around','across','x','all'];
+W.modes = ['wordle','around','across','x','all'];
 
 W.dicts = [
 {
@@ -125,14 +125,14 @@ W.output = function(string, history){
 
 	$('status').innerHTML = wordsCount;
 	$('result').className = 'inline-block';
-	
+
 	if (!string) return;
-	
+
 	W.result[string] = history;
 
 	var li = document.createElement('li');
-
-	li.innerHTML = string.toLowerCase();
+	var text = string.toLowerCase();
+	li.innerHTML = '<a target="dict" href="https://en.wiktionary.org/wiki/'+ text +'">'+ text +'</a>';
 	$('output').appendChild(li);
 
 	li.onmouseover = function(){
@@ -190,15 +190,16 @@ window.$ = function(id){
 
 var Board = W.Board = function(option){
 	var self = this;
-	
+
 	option = option || {};
 
 	self.width = option.width || 3;
 	self.height =  option.height || 3;
 	self.minLength = option.minLength || 3;
 	self.letters = option.letters || [];
-	
-	self.finish = function(){		
+	self.wildcardLetters = W.chars;
+
+	self.finish = function(){
 		var pastTime = (+new Date() - self.startTime) / 1000;
 		$('status').innerHTML += ', <b>' + pastTime + '</b> secondes';
 	};
@@ -210,6 +211,10 @@ var Board = W.Board = function(option){
 		self.minLength = minLength || wordLimit;
 		self.solve();
 	};
+
+	$('wildcard').onclick = function(){
+		self.wildcardLetters = prompt('The wildcard letters', self.wildcardLetters || W.chars);
+	}
 
 	$('random-fill').onclick = function() {
 		self.fill(true);
@@ -237,6 +242,16 @@ var Board = W.Board = function(option){
 			})
 			$mode.className = 'btn active';
 			self.mode = mode;
+			if(mode === 'wordle'){
+				$('min-length').value = 5;
+				$('board-width').value = 5;
+				$('board-height').value = 1;
+				self.minLength = 5;
+				self.width = 5;
+				self.height = 1;
+				self.letters = ['?????'];
+				self.fill();
+			}
 			self.solve();
 		}
 		return $mode;
@@ -303,7 +318,7 @@ Board.prototype.randomLetter = function(){
 
 		letter = W.chars.charAt(i);
 		seed -= W.dict[letter][this.countMark];
-		
+
 		if (seed <= 0) {
 			break;
 		}
@@ -383,6 +398,8 @@ Board.prototype.walk = function(x, y, history, string){
 						canWalk = nextX == x || nextY == y;
 					} else if (self.mode == 'x') {
 						canWalk = nextX != x && nextY != y;
+					} else if (self.mode == 'wordle') {
+						canWalk = nextY > y;
 					} else {
 						canWalk = true;
 					}
@@ -395,9 +412,9 @@ Board.prototype.walk = function(x, y, history, string){
 	}
 
 	if (letter === '?') {// wildcard
-		var l = W.chars.length;
+		var l = self.wildcardLetters.length;
 		for (var i = 0; i < l; i++) {
-			addLetter(W.chars.charAt(i));
+			addLetter(self.wildcardLetters.charAt(i));
 		}
 	} else {
 		addLetter(letter);
