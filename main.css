@@ -52,6 +52,7 @@ a:hover {
 	display: block;
 	text-align: left;
 	color: #444;
+	line-height: 22px;
 }
 .btn {
 	border: 0 none;
@@ -101,46 +102,36 @@ a:hover {
 				7px -7px #FFF,
 				-7px 7px #FFF;
 }
-			
+
 #mode-across::before {
 	box-shadow: 7px 0 0 #FFF,
 				0 7px #FFF,
 				-7px 0 #FFF,
 				0 -7px #FFF;
 }
-						
+
 #mode-x::before {
 	box-shadow: 7px 7px 0 #FFF,
 				-7px -7px #FFF,
 				7px -7px #FFF,
 				-7px 7px #FFF;
 }
-						
-#mode-all::before {
-	box-shadow: 7px 7px 0 #FFF,
-				7px 0 0 #FFF,
-				0 7px #FFF,
+
+#mode-wordle::before {
+	background: #eece42;
+	top: 17px;
+	left: 17px;
+	width: 6px;
+	height: 6px;
+	border-radius: 0px;
+	box-shadow: 7px 7px 0 #8ae4d6,
+				7px 0 0 #8ae4d6,
+				0 7px #8ae4d6,
 				-7px -7px #FFF,
 				-7px 0 #FFF,
 				0 -7px #FFF,
 				7px -7px #FFF,
-				-7px 7px #FFF,
-				14px 14px 0 #FFF,
-				14px 0 0 #FFF,
-				0 14px #FFF,
-				-14px -14px #FFF,
-				-14px 0 #FFF,
-				0 -14px #FFF,
-				14px -14px #FFF,
-				-14px 14px #FFF,
-				14px 7px #FFF,
-				14px -7px #FFF,
-				-14px -7px #FFF,
-				-14px 7px #FFF,
-				7px 14px #FFF,
-				7px -14px #FFF,
-				-7px 14px #FFF,
-				-7px -14px #FFF;
+				-7px 7px #8ae4d6;
 }
 
 .group input.text{
@@ -177,7 +168,7 @@ a:hover {
 	display: none;
 }
 
-#board { 
+#board {
 	border-left: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
 	margin-bottom: 20px;
@@ -224,6 +215,7 @@ a:hover {
 	background: #fff;
 	color: #000;
 	outline: 0 none;
+	text-transform: uppercase;
 }
 
 .board-line input:hover {
@@ -274,5 +266,5 @@ h2 {
 }
 
 #output li:hover {
-	background: #FF8;	
+	background: #FF8;
 }

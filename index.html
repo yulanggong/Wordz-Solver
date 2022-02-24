@@ -16,24 +16,25 @@
 		<div class="group">
 			<label>Dict</label>
 			<span class="dict-group">
-				<button 
-					id="dict-sowpods" title="SOWPODS" class="btn active">SOWPODS</button><button 
+				<button
+					id="dict-sowpods" title="SOWPODS" class="btn active">SOWPODS</button><button
 					id="dict-twl" title="TWL" class="btn">TWL</button>
 			</span>
 		</div>
 		<div class="group">
 			<label>Mode</label>
 			<span class="mode-group">
-				<button 
-					id="mode-across" title="Across" class="btn"></button><button 
-					id="mode-x" title="X" class="btn"></button><button 
-					id="mode-around" title="Around" class="btn active"></button><button 
+				<button
+					id="mode-wordle" title="Wordle" class="btn"></button><button
+					id="mode-across" title="Across" class="btn"></button><button
+					id="mode-x" title="X" class="btn"></button><button
+					id="mode-around" title="Around" class="btn active"></button><button
 					id="mode-all" title="All" class="btn"></button>
 			</span>
 		</div>
 		<div class="group">
 			<label>Size</label>
-			<input id="board-width" class="text" type="text" value="3"> x 
+			<input id="board-width" class="text" type="text" value="3"> x
 			<input id="board-height" class="text" type="text" value="3">
 			<button id="new-board" class="btn">New</button>
 		</div>
@@ -43,6 +44,7 @@
 		<div class="group">
 			<label>Min length</label>
 			<input id="min-length" class="text" type="text" value="4">
+			<button id="wildcard" class="btn">Wildcard</button>
 			<button id="solve" class="btn">Solve</button>
 		</div>
 	</div>
@@ -57,7 +59,7 @@
 		</div>
 	</div>
 	<div class="help">
-		<p>A serverless solver for word game <i>Boggle</i>, <i>WordzUp!</i>, <i>wordoid!</i> and more.</p>
+		<p>A word puzzle solver for <i>Wordle</i>, <i>Boggle</i>, <i>WordzUp!</i>, <i>wordoid!</i> and more.</p>
 		<p>Use the ? wildcard  to represent one letter.</p>
 	</div>
 	<script src="wordzsolver.js"></script>
